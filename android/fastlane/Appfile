@@ -1,0 +1,3 @@
+# TODO needs replace add-your-google-services.json with a new one for your app google-services.json.
+json_key_file("google-services.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.rnfastlane")

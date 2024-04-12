@@ -1,0 +1,66 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+before_all do
+    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+end
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Build a new release apk for testing."
+  lane :apk do|options|
+    puts "Build a new release apk for testing."
+    versionNumber = prompt(text: "VersionNumber(eg. 1.0.1): ")
+    buildNumber = prompt(text: "BuildNumber(eg. 1): ")
+    rocket
+    gradle(task: "clean")
+    gradle(
+      properties: {
+        "versionName" => versionNumber,
+        "versionCode" => buildNumber,
+      },
+      task: "assembleRelease"
+    )
+  end
+
+  desc "Submit a new Build to Google Play Store track: Alpha"
+  lane :alpha do|options|
+    puts "Submit a new Build to Google Play Store track: Alpha"
+    versionNumber = prompt(text: "VersionNumber(eg. 1.0.1): ")
+    buildNumber = prompt(text: "BuildNumber(eg. 1): ")
+    rocket
+    gradle(task: "clean")
+    gradle(
+      properties: {
+        "versionName" => versionNumber,
+        "versionCode" => buildNumber
+      },
+      task: "bundleRelease"
+    )
+    supply(
+      release_status: "completed",
+      track: "alpha",
+      package_name: "com.rnfastlane"
+    )
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+end

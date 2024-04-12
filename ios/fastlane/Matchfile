@@ -1,0 +1,12 @@
+git_url("https://you-private-repo-to-store-certs-and-profile.git")
+
+storage_mode("git")
+
+type("development") # The default type, can be: appstore, adhoc, enterprise or development
+
+ENV["MATCH_PASSWORD"] = "yourpassword" #Password for the .p12 to encrypt/decrypt files saved in git repo.
+
+# For all available options run `fastlane match --help`
+# Remove the # in the beginning of the line to enable the other options
+
+# The docs are available on https://docs.fastlane.tools/actions/match
